@@ -1,9 +1,9 @@
-// app/screens/index.tsx
+// app/NotesListScreen.tsx
 import React from "react";
 import { View, Text, Button } from "react-native";
 import { useRouter } from "expo-router";
 
-export default function Index() {
+export default function NotesListScreen() {
   const router = useRouter();
 
   return (
@@ -12,10 +12,14 @@ export default function Index() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#f5f5f5",
       }}
     >
-      <Text style={{ fontSize: 18 }}>Welcome to the NoteCraft App!</Text>
-      <Button title="Get Started" onPress={() => router.push("/HomeScreen")} />
+      <Text style={{ fontSize: 24, marginBottom: 16 }}>Your Notes</Text>
+      <Button
+        title="Create a Note"
+        onPress={() => router.push("/NoteEditorScreen")}
+      />
     </View>
   );
 }
