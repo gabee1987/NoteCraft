@@ -20,11 +20,21 @@ export default function HomeScreen() {
       </Text>
       <Button
         title="Go to Notes"
-        onPress={() => router.push("/NotesListScreen")}
+        onPress={() =>
+          router.push({
+            pathname: "/NotesListScreen",
+            params: { noteTitle: "Notes" },
+          })
+        }
       />
       <Button
         title="Create a Note"
-        onPress={() => router.push("/NoteEditorScreen")}
+        onPress={() =>
+          router.push({
+            pathname: "/NoteEditorScreen",
+            params: { noteTitle: "Create/Edit Note" },
+          })
+        }
       />
     </View>
   );

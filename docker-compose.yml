@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: directus_postgres
+    environment:
+      POSTGRES_USER: directus_user
+      POSTGRES_PASSWORD: directus_password
+      POSTGRES_DB: directus
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # PostgreSQL default port
+
+  directus:
+    image: directus/directus:latest
+    container_name: directus_app
+    depends_on:
+      - postgres
+    ports:
+      - "8055:8055" # Directus admin UI
+    environment:
+      SECRET: replace-with-secure-random-value
+      DB_CLIENT: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: directus
+      DB_USER: directus_user
+      DB_PASSWORD: directus_password
+      CORS_ENABLED: true
+      CORS_ORIGIN: http://localhost:8081
+      CORS_METHODS: GET,POST,PATCH,DELETE
+      CORS_ALLOWED_HEADERS: Content-Type,Authorization,X-Requested-With
+    volumes:
+      - directus_data:/data
+
+volumes:
+  postgres_data:
+  directus_data:

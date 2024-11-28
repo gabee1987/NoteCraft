@@ -15,7 +15,15 @@ export default function Index() {
       }}
     >
       <Text style={{ fontSize: 18 }}>Welcome to the NoteCraft App!</Text>
-      <Button title="Get Started" onPress={() => router.push("/HomeScreen")} />
+      <Button
+        title="Get Started"
+        onPress={() =>
+          router.push({
+            pathname: "/HomeScreen",
+            params: { noteTitle: "Notes" },
+          })
+        }
+      />
     </View>
   );
 }
