@@ -1,38 +1,65 @@
 // app/NoteEditorScreen.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TextInput, Button, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
-import { createNote } from "../services/notes";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { getNoteById, createNote, updateNote } from "../services/notes";
+import { useSearchParams } from "expo-router/build/hooks";
+import styles from "../styles/NoteEditorStyles"; // Centralized styles
 
 export default function NoteEditorScreen() {
   const router = useRouter();
-
+  const { noteId } = useLocalSearchParams<{ noteId: string }>(); // Get type safe noteId from params
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [isLoading, setIsLoading] = useState(Boolean(noteId));
 
-  const handleSaveNote = async () => {
-    try {
-      if (!title || !content) {
-        alert("Title and content cannot be empty");
-        return;
-      }
-
-      const newNote = {
-        title,
-        content,
-        date_created: new Date().toISOString(),
-        date_modified: new Date().toISOString(),
-        images: [], // Add logic to handle images if applicable
-        importance: 3, // Default importance level
+  useEffect(() => {
+    if (noteId) {
+      const fetchNote = async () => {
+        try {
+          const note = await getNoteById(noteId);
+          if (note) {
+            setTitle(note.title);
+            setContent(note.content);
+          }
+        } catch (error) {
+          console.error("Error fetching note:", error);
+        } finally {
+          setIsLoading(false);
+        }
       };
 
-      const savedNote = await createNote(newNote);
-      if (savedNote) {
-        console.log("Note saved successfully:", savedNote);
-        router.push("/NotesListScreen");
+      fetchNote();
+    }
+  }, [noteId]);
+
+  const handleSaveNote = async () => {
+    if (!title.trim() || !content.trim()) {
+      alert("Title and content cannot be empty");
+      return;
+    }
+
+    const noteData = {
+      title: title.trim(),
+      content: content.trim(),
+      date_modified: new Date().toISOString(),
+    };
+
+    try {
+      if (noteId) {
+        // Update existing note
+        await updateNote(noteId as string, noteData);
       } else {
-        console.error("Failed to save the note");
+        // Create new note
+        const newNote = {
+          ...noteData,
+          date_created: new Date().toISOString(),
+          images: [],
+          importance: 3,
+        };
+        await createNote(newNote);
       }
+      router.push("/HomeScreen");
     } catch (error) {
       console.error("Error saving note:", error);
       alert("Failed to save the note. Please try again.");
@@ -41,38 +68,20 @@ export default function NoteEditorScreen() {
 
   return (
     <View style={styles.container}>
-      <TextInput style={styles.input} placeholder="Enter title..." />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter title..."
+        value={title} // Connect to state
+        onChangeText={setTitle} // Update state
+      />
       <TextInput
         style={styles.textarea}
         placeholder="Enter content..."
+        value={content} // Connect to state
+        onChangeText={setContent} // Update state
         multiline
       />
-      <Button
-        title="Save Note"
-        onPress={() => router.push("/NotesListScreen")}
-      />
+      <Button title="Save Note" onPress={handleSaveNote} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "#f5f5f5",
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 8,
-    padding: 8,
-  },
-  textarea: {
-    flex: 1,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 8,
-    padding: 8,
-  },
-});

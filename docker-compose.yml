@@ -21,17 +21,29 @@ services:
     ports:
       - "8055:8055" # Directus admin UI
     environment:
-      SECRET: replace-with-secure-random-value
+      SECRET: Bxl5B@Y!$LcdS8qGPi8vZuSrQ$V7It
       DB_CLIENT: postgres
       DB_HOST: postgres
       DB_PORT: 5432
       DB_DATABASE: directus
       DB_USER: directus_user
       DB_PASSWORD: directus_password
+      # REDIS_HOST: redis
+      # REDIS_PORT: 6379
       CORS_ENABLED: true
       CORS_ORIGIN: http://localhost:8081
       CORS_METHODS: GET,POST,PATCH,DELETE
       CORS_ALLOWED_HEADERS: Content-Type,Authorization,X-Requested-With
+      LOG_LEVEL: debug
+
+      # SMTP Configuration for Mailtrap
+      SMTP_HOST: sandbox.smtp.mailtrap.io
+      SMTP_PORT: 587
+      SMTP_USER: 70d554d3787629
+      SMTP_PASSWORD: 7af44a2be1d8a2
+      SMTP_SECURE: false # Set true for SSL (Port 465); false for TLS (Port 587 or 2525)
+      PUBLIC_URL: http://localhost:8055 # Replace with your actual app URL if deployed
+
     volumes:
       - directus_data:/data
 

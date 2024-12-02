@@ -1,4 +1,4 @@
-// app/screens/index.tsx
+// app/(tabs)/index.tsx
 import React from "react";
 import { View, Text, Button } from "react-native";
 import { useRouter } from "expo-router";
