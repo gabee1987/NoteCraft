@@ -5,6 +5,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   StyleSheet,
+  View,
 } from "react-native";
 import { Note } from "../types/note";
 import styles from "../styles/AnimatedNoteItemStyles";
@@ -73,8 +74,31 @@ const AnimatedNoteItem: React.FC<AnimatedNoteItemProps> = ({
           },
         ]}
       >
-        <Text style={styles.noteTitle}>{note.title}</Text>
-        <Text style={styles.noteContent}>{note.content}</Text>
+        <View style={styles.contentContainer}>
+          <View style={styles.textContainer}>
+            <Text style={styles.noteTitle}>{note.title}</Text>
+            <Text
+              style={styles.noteContent}
+              numberOfLines={3}
+              ellipsizeMode="tail"
+            >
+              {note.content}
+            </Text>
+          </View>
+          <View style={styles.ratingContainer}>
+            {Array.from({ length: 5 }, (_, index) => (
+              <Text
+                key={index}
+                style={[
+                  styles.ratingStar,
+                  index < note.rating && styles.filledStar,
+                ]}
+              >
+                ★
+              </Text>
+            ))}
+          </View>
+        </View>
       </Animated.View>
     </TouchableWithoutFeedback>
   );

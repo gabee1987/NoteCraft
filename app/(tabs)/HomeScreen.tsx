@@ -17,8 +17,10 @@ export default function HomeScreen() {
     const fetchNotes = async () => {
       try {
         const data = await getNotes();
-        // Sort notes by rating (importance) descending
-        const sortedNotes = data.sort((a, b) => b.rating - a.rating);
+        // Sort notes by date created descending
+        const sortedNotes = data.sort(
+          (a, b) => b.date_created.getTime() - a.date_created.getTime()
+        );
         setNotes(sortedNotes);
       } catch (error) {
         console.error("Error fetching notes:", error);

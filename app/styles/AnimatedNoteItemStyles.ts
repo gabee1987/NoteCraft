@@ -23,4 +23,24 @@ export default StyleSheet.create({
     fontSize: 14,
     color: "#434343",
   },
+  contentContainer: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  textContainer: {
+    flex: 1, // Allow text to take up the remaining space
+  },
+  ratingContainer: {
+    flexDirection: "row",
+    alignSelf: "flex-end",
+  },
+  ratingStar: {
+    fontSize: 14,
+    color: "#ccc",
+    marginRight: 2,
+  },
+  filledStar: {
+    color: "#FFD700", // Gold color for filled stars
+  },
 });
