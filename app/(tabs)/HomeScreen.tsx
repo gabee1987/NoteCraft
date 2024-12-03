@@ -1,14 +1,6 @@
 // app/(tabs)/HomeScreen.tsx
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Animated,
-  Easing,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, FlatList } from "react-native";
 import { useRouter } from "expo-router";
 import { getNotes } from "../services/notes";
 import { Note } from "../types/note";
@@ -25,7 +17,9 @@ export default function HomeScreen() {
     const fetchNotes = async () => {
       try {
         const data = await getNotes();
-        setNotes(data);
+        // Sort notes by rating (importance) descending
+        const sortedNotes = data.sort((a, b) => b.rating - a.rating);
+        setNotes(sortedNotes);
       } catch (error) {
         console.error("Error fetching notes:", error);
       } finally {

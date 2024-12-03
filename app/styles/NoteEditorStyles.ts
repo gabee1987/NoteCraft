@@ -30,4 +30,16 @@ export default StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
+  saveButton: {
+    backgroundColor: "#007BFF",
+    borderRadius: 8,
+    padding: 12,
+    alignItems: "center",
+    marginTop: 16,
+  },
+  saveButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });

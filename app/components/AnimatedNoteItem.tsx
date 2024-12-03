@@ -27,12 +27,12 @@ const AnimatedNoteItem: React.FC<AnimatedNoteItemProps> = ({
     Animated.parallel([
       Animated.timing(scale, {
         toValue: 0.97,
-        duration: 100,
+        duration: 50,
         useNativeDriver: true,
       }),
       Animated.timing(shadowOpacity, {
         toValue: 0.5,
-        duration: 100,
+        duration: 50,
         useNativeDriver: false,
       }),
     ]).start();
@@ -42,7 +42,7 @@ const AnimatedNoteItem: React.FC<AnimatedNoteItemProps> = ({
     Animated.parallel([
       Animated.timing(scale, {
         toValue: 1,
-        duration: 100,
+        duration: 50,
         useNativeDriver: true,
       }),
       Animated.timing(shadowOpacity, {

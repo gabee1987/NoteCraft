@@ -1,9 +1,9 @@
 // app/NoteEditorScreen.tsx
 import React, { useState, useEffect } from "react";
-import { View, TextInput, Button, StyleSheet } from "react-native";
+import { View, TextInput, TouchableOpacity, Text } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { getNoteById, createNote, updateNote } from "../services/notes";
-import { useSearchParams } from "expo-router/build/hooks";
+import StarRatingInput from "../components/StarRatingInput";
 import styles from "../styles/NoteEditorStyles"; // Centralized styles
 
 export default function NoteEditorScreen() {
@@ -11,6 +11,8 @@ export default function NoteEditorScreen() {
   const { noteId } = useLocalSearchParams<{ noteId: string }>(); // Get type safe noteId from params
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [rating, setRating] = useState(3);
+
   const [isLoading, setIsLoading] = useState(Boolean(noteId));
 
   useEffect(() => {
@@ -21,6 +23,8 @@ export default function NoteEditorScreen() {
           if (note) {
             setTitle(note.title);
             setContent(note.content);
+            setRating(note.rating || 3);
+            console.log("Rating after open: ", rating);
           }
         } catch (error) {
           console.error("Error fetching note:", error);
@@ -42,7 +46,8 @@ export default function NoteEditorScreen() {
     const noteData = {
       title: title.trim(),
       content: content.trim(),
-      date_modified: new Date().toISOString(),
+      date_updated: new Date(),
+      rating: rating,
     };
 
     try {
@@ -53,9 +58,9 @@ export default function NoteEditorScreen() {
         // Create new note
         const newNote = {
           ...noteData,
-          date_created: new Date().toISOString(),
+          date_created: new Date(),
           images: [],
-          importance: 3,
+          rating: rating,
         };
         await createNote(newNote);
       }
@@ -81,7 +86,10 @@ export default function NoteEditorScreen() {
         onChangeText={setContent} // Update state
         multiline
       />
-      <Button title="Save Note" onPress={handleSaveNote} />
+      <StarRatingInput rating={rating} onRatingChange={setRating} />
+      <TouchableOpacity style={styles.saveButton} onPress={handleSaveNote}>
+        <Text style={styles.saveButtonText}>Save Note</Text>
+      </TouchableOpacity>
     </View>
   );
 }

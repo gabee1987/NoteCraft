@@ -9,8 +9,9 @@ interface Schema {
   notes: Note[];
 }
 
-export const directus = createDirectus<Schema>(DIRECTUS_URL).with(rest());
-//   .with(authentication());
+export const directus = createDirectus<Schema>(DIRECTUS_URL)
+  .with(rest())
+  .with(authentication());
 
 // export const login = async (email: string, password: string) => {
 //   try {
